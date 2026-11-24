@@ -3,7 +3,7 @@ name: prior-inventions-keep-current
 description: Use when I finish building or designing something new (an app, tool, skill, prompt or method), or ask to add something to my Prior Inventions page.
 ---
 
-# Prior Inventions: Keep It Current (version 2.0.1)
+# Prior Inventions: Keep It Current (version 2.0.2)
 
 My request: "Keep my Prior Inventions page current as I build new things."
 
@@ -79,4 +79,4 @@ Keep it short: one line saying what you added, with the link to my page, then an
 
 ---
 
-Prior Inventions Keep It Current skill, version 2.0.1. (c) 2026 Rich Henderson. Shared under CC BY-NC 4.0: free to use and adapt for your own records, with credit. Not for resale or use in a paid product. Not legal advice.
+Prior Inventions Keep It Current skill, version 2.0.2. (c) 2026 Rich Henderson. Shared under CC BY-NC 4.0: free to use and adapt for your own records, with credit. Not for resale or use in a paid product. Not legal advice.

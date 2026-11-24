@@ -1,6 +1,6 @@
 {
-  "version": "2.0.1",
-  "skillVersion": "2.0.1",
-  "notes": "Prior Inventions is now its own web page with one-click updates and Word and PDF downloads of the Exhibit.",
+  "version": "2.0.2",
+  "skillVersion": "2.0.2",
+  "notes": "Dates you already settled on the Exhibit no longer count as dates to confirm, and the personal-use notice is easier to see.",
   "url": "https://doovli.app/prior-inventions.html"
 }

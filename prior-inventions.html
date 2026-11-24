@@ -16,6 +16,7 @@ h2{font:600 21px/1.2 var(--display);margin:4px 0 0}
 h3{margin:0;font:600 17px var(--display)}
 .sub{color:var(--muted);margin:4px 0 0;max-width:75ch}
 .note{font-size:13px;color:var(--muted);margin:0}
+.notice{font:600 14px/1.5 var(--body);color:var(--accent);margin:0 0 18px}
 a{color:var(--accent)}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .tab{border:0;background:none;padding:8px 14px;font:600 14px var(--body);color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
@@ -70,7 +71,7 @@ footer{text-align:center;font-size:12px;color:var(--muted)}
 <body>
 <div class="wrap">
   <header>
-    <p class="note">Free for personal use only. To share it, send people to <a href="https://doovli.app/prior-inventions.html" target="_blank" rel="noopener">doovli.app</a>. Not for sale or use in a paid product. Not legal advice.</p>
+    <p class="notice">Free for personal use only. To share it, send people to <a href="https://doovli.app/prior-inventions.html" target="_blank" rel="noopener">doovli.app</a>. Not for sale or use in a paid product. Not legal advice.</p>
     <h1 id="title">Prior Inventions</h1>
     <p class="sub">What you built before a new job or contract, dated from your own records. Approve each item on the Approval List. The Register keeps the full detail for you, and the Exhibit is the short list you give an employer.</p>
   </header>
@@ -95,7 +96,7 @@ footer{text-align:center;font-size:12px;color:var(--muted)}
 <script>
 (function(){
 "use strict";
-const APP_VERSION="2.0.1";
+const APP_VERSION="2.0.2";
 const TYPES=[["M","Methodologies","Methods and frameworks that people apply, with or without software."],["S","Software built","Working apps, AI agents, skills and prompts, at least partly built."],["D","Designed, not built","Conceived and documented, with no working version yet."]];
 const EXH_HEAD={M:"Methodologies",S:"Software",D:"Designs and concepts"};
 const TYPE_NAME={M:"Methodology",S:"Software",D:"Design"};
@@ -147,7 +148,7 @@ function renderUpdate(){
     catch(e){un.disabled=false;$("update-msg").textContent=e&&e.code==="needs_reauth"?"Reconnect Claude Code Remote under Settings, Connectors, then try again.":"The update did not start. Try again in a minute."}};
   $("update-later").onclick=()=>S.db.doc("settings/update").update({dismissed:u.version}).catch(()=>{});
 }
-function counts(){const c={In:0,Out:0,Discuss:0,none:0,confirm:0};S.items.forEach(i=>{const k=/^in$/i.test(i.include)?"In":/^out$/i.test(i.include)?"Out":/^discuss$/i.test(i.include)?"Discuss":"none";c[k]++;if(isConfirm(i.conceived)||(i.type!=="D"&&isConfirm(i.built)))c.confirm++});return c}
+function counts(){const c={In:0,Out:0,Discuss:0,none:0,confirm:0};S.items.forEach(i=>{const k=/^in$/i.test(i.include)?"In":/^out$/i.test(i.include)?"Out":/^discuss$/i.test(i.include)?"Discuss":"none";c[k]++;if(k!=="Out"&&!i.exhibitDate&&(isConfirm(i.conceived)||(i.type!=="D"&&isConfirm(i.built))))c.confirm++});return c}
 function renderDashboard(){
   const v=$("view-dashboard");
   if(!S.loaded){v.innerHTML='<div class="panel"><p class="empty">'+(S.db===false?"Sign in to see your list.":"Loading...")+'</p></div>';return}
@@ -183,7 +184,7 @@ function renderApproval(){
   const v=$("view-approval");
   if(!S.loaded){v.innerHTML="";return}
   const L=S.lists||{};
-  let h='<div class="panel"><h3>How to use this list</h3><p style="margin:0">Set the Include column on each row to In, Out or Discuss, and correct any date you know better. Rows marked In move to the Register with full detail, then to the Exhibit in general terms.</p><ul class="plain"><li>Conceived is the earliest dated record of the idea. Built is the earliest dated record of a working version. "On or before" means the record proves the date was no later than that.</li><li>"Confirm" means no dated record was found. Fill in the date, or a date range you are confident of.</li><li>Each ID stays with its item for good: M for methodologies, S for software built, D for designed but not built.</li></ul></div>';
+  let h='<div class="panel"><h3>How to use this list</h3><p style="margin:0">Set the Include column on each row to In, Out or Discuss, and correct any date you know better. Rows marked In move to the Register with full detail, then to the Exhibit in general terms.</p><ul class="plain"><li>Conceived is the earliest dated record of the idea. Built is the earliest dated record of a working version. "On or before" means the record proves the date was no later than that.</li><li>"Confirm" means no dated record was found. Fill in the date, or a date range you are confident of. A row that shows an Exhibit date is already settled for the Exhibit and does not count as open.</li><li>Each ID stays with its item for good: M for methodologies, S for software built, D for designed but not built.</li></ul></div>';
   TYPES.forEach(([t,head,line])=>{
     const its=S.items.filter(i=>i.type===t).sort(sortItems);const isD=t==="D";
     h+='<div class="panel"><div class="bar"><div><h3>'+head+'</h3><p class="note">'+line+'</p></div>'+(S.canWrite?'<button class="btn sm" data-act="add-row" data-type="'+t+'" type="button">Add an item</button>':'')+'</div><div class="tw"><table class="t"><thead><tr><th>ID</th><th>Item</th><th>What it is</th><th>Conceived</th>'+(isD?'':'<th>Built</th>')+'<th>Include</th><th>Notes</th><th></th></tr></thead><tbody>';
@@ -192,7 +193,7 @@ function renderApproval(){
     its.forEach(i=>{
       if(S.edit&&!S.edit.isNew&&S.edit.doc===i._doc){h+=editRow(i,false);return}
       const sub=!!i.parent;
-      h+='<tr'+(sub?' class="subrow"':'')+'><td class="idc">'+(sub?'↳ ':'')+esc(i.id)+'</td><td>'+esc(i.name)+'</td><td>'+esc(i.what)+'</td><td>'+dateHtml(i.conceived)+'</td>'+(isD?'':'<td>'+dateHtml(i.built)+'</td>')+
+      h+='<tr'+(sub?' class="subrow"':'')+'><td class="idc">'+(sub?'↳ ':'')+esc(i.id)+'</td><td>'+esc(i.name)+'</td><td>'+esc(i.what)+'</td><td>'+dateHtml(i.conceived)+(i.exhibitDate?'<br><span class="note">Exhibit date: '+esc(i.exhibitDate)+'</span>':'')+'</td>'+(isD?'':'<td>'+dateHtml(i.built)+'</td>')+
         '<td>'+(S.canWrite?'<select data-act="incl" data-id="'+esc(i._doc)+'" aria-label="Include '+esc(i.id)+'">'+["","In","Out","Discuss"].map(o=>'<option value="'+o+'"'+((i.include||"")===o?" selected":"")+'>'+(o||"Choose")+'</option>').join("")+'</select>':inclPill(i.include))+'</td><td>'+esc(i.notes)+'</td><td>'+(S.canWrite?'<button class="btn sm" data-act="edit-row" data-id="'+esc(i._doc)+'" type="button">Edit</button>':'')+'</td></tr>';
     });
     h+='</tbody></table></div></div>';
