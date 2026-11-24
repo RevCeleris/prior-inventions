@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prior Inventions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap">
+<style>
+:root{--bg:#f3f5f6;--surface:#fff;--ink:#18232b;--muted:#5b6a74;--line:#d9e0e4;--accent:#1d5d78;--accent-soft:#e2eef3;--ok:#2e7a4f;--ok-soft:#e3f2e8;--warn:#9a6a10;--warn-soft:#f7eed9;--bad:#a3413a;--bad-soft:#f6e3e1;--sub:#f1f3f4;
+--display:"Newsreader",Georgia,serif;--body:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#11181d;--surface:#18222a;--ink:#e3eaee;--muted:#93a3ad;--line:#2a3741;--accent:#6fb3d0;--accent-soft:#1d3440;--ok:#7cc79a;--ok-soft:#1c3226;--warn:#e0b45a;--warn-soft:#3a2f17;--bad:#e38b83;--bad-soft:#3d2321;--sub:#1f2a32;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);padding:24px 16px 48px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;gap:18px}
+h1{font:600 clamp(26px,4vw,34px)/1.15 var(--display);margin:0}
+h2{font:600 21px/1.2 var(--display);margin:4px 0 0}
+h3{margin:0;font:600 17px var(--display)}
+.sub{color:var(--muted);margin:4px 0 0;max-width:75ch}
+.note{font-size:13px;color:var(--muted);margin:0}
+a{color:var(--accent)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{border:0;background:none;padding:8px 14px;font:600 14px var(--body);color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tab .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:var(--warn);color:#fff;font:600 11px/18px var(--body);text-align:center}
+section[role=tabpanel]{display:grid;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;gap:10px}
+.strip{display:flex;flex-wrap:wrap;gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;min-width:110px}
+.stat b{display:block;font:500 22px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.rowb{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1px solid var(--accent);background:var(--surface);color:var(--accent);border-radius:6px;padding:7px 12px;font:500 13px var(--body);cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--surface)}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.btn.sm{padding:3px 8px;font-size:12px}
+.btn:disabled{opacity:.55;cursor:default}
+.btn:focus-visible,.tab:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%}
+textarea{min-height:64px;resize:vertical}
+label.f{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.tw{overflow-x:auto}
+table.t{border-collapse:collapse;width:100%;font-size:14px}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.t th{background:var(--accent-soft);font-weight:600;font-size:13px}
+table.t tr.subrow td{background:var(--sub)}
+td.idc{white-space:nowrap;font-weight:600}
+.pill{display:inline-block;font:600 11px/1.6 var(--body);letter-spacing:.05em;text-transform:uppercase;padding:0 7px;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
+.pill.in{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.pill.out{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.pill.discuss{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)}
+.confirm{color:var(--warn);font-weight:600}
+.saved{font-size:12px;color:var(--ok)}
+.err{font-size:12px;color:var(--bad)}
+.banner{background:var(--warn-soft);border:1px solid var(--warn);border-radius:8px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.banner.ok{background:var(--ok-soft);border-color:var(--ok)}
+.reg{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.reg p{margin:0;max-width:85ch}
+.reg .lbl{font-weight:600}
+.exh{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:24px;display:grid;gap:12px}
+.exh h2{text-align:left}
+.sig{display:grid;gap:18px;margin-top:10px;max-width:480px}
+.sig div{border-bottom:1px solid var(--ink);padding-bottom:2px;font-size:13px;color:var(--muted)}
+ul.plain{margin:0;padding-left:20px}
+footer{text-align:center;font-size:12px;color:var(--muted)}
+.edrow td{background:var(--accent-soft)}
+.empty{color:var(--muted);font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="note">Free for personal use only. To share it, send people to <a href="https://doovli.app/prior-inventions.html" target="_blank" rel="noopener">doovli.app</a>. Not for sale or use in a paid product. Not legal advice.</p>
+    <h1 id="title">Prior Inventions</h1>
+    <p class="sub">What you built before a new job or contract, dated from your own records. Approve each item on the Approval List. The Register keeps the full detail for you, and the Exhibit is the short list you give an employer.</p>
+  </header>
+
+  <div id="update-banner" class="banner" hidden></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="dashboard" aria-selected="true" type="button">Dashboard</button>
+    <button class="tab" role="tab" data-tab="approval" aria-selected="false" type="button">Approval List<span class="badge" id="ap-badge" hidden></span></button>
+    <button class="tab" role="tab" data-tab="register" aria-selected="false" type="button">Register</button>
+    <button class="tab" role="tab" data-tab="exhibit" aria-selected="false" type="button">Exhibit</button>
+  </div>
+
+  <section role="tabpanel" id="view-dashboard"></section>
+  <section role="tabpanel" id="view-approval" hidden></section>
+  <section role="tabpanel" id="view-register" hidden></section>
+  <section role="tabpanel" id="view-exhibit" hidden></section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const APP_VERSION="2.0";
+const TYPES=[["M","Methodologies","Methods and frameworks that people apply, with or without software."],["S","Software built","Working apps, AI agents, skills and prompts, at least partly built."],["D","Designed, not built","Conceived and documented, with no working version yet."]];
+const EXH_HEAD={M:"Methodologies",S:"Software",D:"Designs and concepts"};
+const TYPE_NAME={M:"Methodology",S:"Software",D:"Design"};
+const S={db:null,canWrite:true,sample:null,dl:null,mcp:null,loaded:false,main:{},lists:{},tasks:{},upd:{},items:[],revs:[],acts:[],tab:"dashboard",edit:null,regEdit:null,regDraft:{},exhEdit:false,msg:{}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const arr=x=>Array.isArray(x)?x:[];
+const nowIso=()=>new Date().toISOString();
+const tz=()=>S.main.timezone||Intl.DateTimeFormat().resolvedOptions().timeZone;
+function today(fmt){try{return new Intl.DateTimeFormat("en-US",Object.assign({timeZone:tzIana()},fmt)).format(new Date())}catch(e){return new Intl.DateTimeFormat("en-US",fmt).format(new Date())}}
+function tzIana(){const z=S.main.timezoneIana;try{if(z){Intl.DateTimeFormat("en-US",{timeZone:z});return z}}catch(e){}return Intl.DateTimeFormat().resolvedOptions().timeZone}
+const todayLong=()=>today({day:"numeric",month:"long",year:"numeric"});
+function vcmp(a,b){const x=String(a||"0").split(".").map(Number),y=String(b||"0").split(".").map(Number);for(let i=0;i<Math.max(x.length,y.length);i++){const d=(x[i]||0)-(y[i]||0);if(d)return d>0?1:-1}return 0}
+function docId(id){return String(id).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
+function sortItems(a,b){return String(a.id).localeCompare(String(b.id),undefined,{numeric:true})}
+const isConfirm=d=>!d||!d.text||/confirm/i.test(d.text);
+function dateHtml(d){if(!d||!d.text)return '<span class="confirm">Confirm</span>';if(/confirm/i.test(d.text))return '<span class="confirm">'+esc(d.text)+'</span>';const t=esc(d.text);return d.url&&/^https?:\/\//.test(d.url)?t+'<br><a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.label||"Record")+'</a>':t+(d.label?'<br><span class="note">'+esc(d.label)+'</span>':'')}
+function monthYear(d,override){if(override)return override;if(isConfirm(d))return "Confirm";const raw=String(d.text).replace(/on or before/i,"").trim();const m=raw.match(/([A-Za-z]{3,9})\.?\s+(\d{4})/);if(m){const mo=new Date(m[1]+" 1, 2000");if(!isNaN(mo))return mo.toLocaleString("en-US",{month:"long"})+" "+m[2]}const p=new Date(raw);if(!isNaN(p))return p.toLocaleString("en-US",{month:"long",year:"numeric",timeZone:"UTC"});return raw}
+function inclPill(v){const k=String(v||"").toLowerCase();return k==="in"||k==="out"||k==="discuss"?'<span class="pill '+k+'">'+esc(v)+'</span>':'<span class="pill">Not set</span>'}
+function setMsg(k,t,bad){S.msg[k]={t,bad};const el=document.querySelector('[data-msg="'+k+'"]');if(el){el.textContent=t;el.className=bad?"err":"saved"}}
+function msgSpan(k){const m=S.msg[k];return '<span data-msg="'+k+'" class="'+(m&&m.bad?"err":"saved")+'">'+esc(m?m.t:"")+'</span>'}
+
+/* ---------- tabs ---------- */
+document.querySelector(".tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;showTab(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(_){location.hash=b.dataset.tab}});
+function showTab(t){if(!["dashboard","approval","register","exhibit"].includes(t))t="dashboard";S.tab=t;document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t?"true":"false"));["dashboard","approval","register","exhibit"].forEach(v=>$("view-"+v).hidden=v!==t)}
+window.addEventListener("hashchange",()=>showTab(location.hash.replace("#","")));
+
+/* ---------- render ---------- */
+function renderAll(){
+  const name=S.main.name||"";
+  $("title").textContent=name?name+" - Prior Inventions":"Prior Inventions";
+  document.title=$("title").textContent;
+  $("foot").textContent="Prior Inventions, version "+APP_VERSION+". (c) 2026 Rich Henderson. CC BY-NC 4.0.";
+  renderUpdate();renderDashboard();renderApproval();renderRegister();renderExhibit();
+  const open=S.items.filter(i=>!/^(in|out)$/i.test(i.include||"")).length;
+  $("ap-badge").hidden=!open;$("ap-badge").textContent=open;
+}
+function renderUpdate(){
+  const u=S.upd||{},b=$("update-banner");
+  if(u.applying&&vcmp(u.applying,APP_VERSION)>0){b.hidden=false;b.className="banner";b.innerHTML='<span>Updating to version '+esc(u.applying)+'. This takes a few minutes. Reload the page when you get the notification.</span>';return}
+  if(!u.version||vcmp(u.version,APP_VERSION)<=0||u.dismissed===u.version||!S.canWrite){b.hidden=true;return}
+  b.hidden=false;b.className="banner";
+  const canRun=!!(S.mcp&&S.tasks.update);
+  b.innerHTML='<span><b>Version '+esc(u.version)+' is ready.</b> '+esc(u.notes||"")+(canRun?'':' To install it, start a new chat in Claude and send: Update my Prior Inventions.')+'</span><span class="rowb">'+(canRun?'<button class="btn primary" id="update-now" type="button">Update now</button>':'')+'<button class="btn" id="update-later" type="button">Not now</button><span id="update-msg" class="note"></span></span>';
+  const un=$("update-now");if(un)un.onclick=async()=>{un.disabled=true;$("update-msg").textContent="Starting the update...";
+    try{const id="a-"+Date.now();await S.db.doc("activity/"+id).set({kind:"update",label:"Update to version "+u.version,status:"running",startedAt:nowIso()});
+      await S.mcp.callTool("Claude Code Remote","fire_trigger",{trigger_id:S.tasks.update,text:"ACTIVITY ID: "+id+"\nMODE: APPLY UPDATE\nVERSION: "+u.version},{cache:false});
+      await S.db.doc("settings/update").update({applying:u.version}).catch(()=>{})}
+    catch(e){un.disabled=false;$("update-msg").textContent=e&&e.code==="needs_reauth"?"Reconnect Claude Code Remote under Settings, Connectors, then try again.":"The update did not start. Try again in a minute."}};
+  $("update-later").onclick=()=>S.db.doc("settings/update").update({dismissed:u.version}).catch(()=>{});
+}
+function counts(){const c={In:0,Out:0,Discuss:0,none:0,confirm:0};S.items.forEach(i=>{const k=/^in$/i.test(i.include)?"In":/^out$/i.test(i.include)?"Out":/^discuss$/i.test(i.include)?"Discuss":"none";c[k]++;if(isConfirm(i.conceived)||(i.type!=="D"&&isConfirm(i.built)))c.confirm++});return c}
+function renderDashboard(){
+  const v=$("view-dashboard");
+  if(!S.loaded){v.innerHTML='<div class="panel"><p class="empty">'+(S.db===false?"Sign in to see your list.":"Loading...")+'</p></div>';return}
+  const c=counts(),m=S.main;
+  let next;
+  if(!S.items.length)next="Your list is empty. Run the Setup Prompt in a new Claude chat to find your candidates.";
+  else if(c.none||c.Discuss)next="Open the Approval List and set Include to In or Out on the "+(c.none+c.Discuss)+" item"+(c.none+c.Discuss===1?"":"s")+" still open. Then go back to your setup chat and send: My approvals are done.";
+  else next="Every item is decided. Review the Exhibit, then download it as Word or PDF and take it to your lawyer before you sign anything.";
+  let h='<div class="strip">'+[["In",c.In],["Out",c.Out],["Discuss",c.Discuss],["Not set",c.none],["Dates to confirm",c.confirm]].map(x=>'<div class="stat"><b>'+x[1]+'</b><span>'+x[0]+'</span></div>').join("")+'</div>';
+  h+='<div class="panel"><h3>Next step</h3><p style="margin:0">'+esc(next)+'</p></div>';
+  h+='<div class="panel"><h3>Document control</h3><div class="tw"><table class="t"><tbody>'+
+    [["Document ID",m.docId||"Not set"],["Owner",(m.name||"")+(m.name?". Every item on this list is owned by "+m.name+" personally.":"")],["Classification","Confidential (Approval List and Register). The Exhibit is written for disclosure."],["Current version",m.docVersion||"0.1 (Draft, becomes 1.0 on approval)"],["Prior Inventions version",APP_VERSION],["Review cycle","On every new invention, and before signing any employment or contractor agreement"],["Time zone","All times "+(m.timezone||"local")]].map(r=>'<tr><th style="width:200px">'+esc(r[0])+'</th><td>'+esc(r[1])+'</td></tr>').join("")+'</tbody></table></div>';
+  h+='<h3 style="font-size:15px">Revision history (oldest first)</h3><div class="tw"><table class="t"><thead><tr><th>Version</th><th>Date</th><th>Time</th><th>Author</th><th>Description of change</th><th>Approved by</th></tr></thead><tbody>'+
+    (S.revs.length?S.revs.map(r=>'<tr><td>'+esc(r.version)+'</td><td>'+esc(r.date)+'</td><td>'+esc(r.time)+'</td><td>'+esc(r.author)+'</td><td>'+esc(r.description)+'</td><td>'+esc(r.approvedBy)+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No revisions yet.</td></tr>')+'</tbody></table></div></div>';
+  const acts=S.acts.slice().sort((a,b)=>String(b.startedAt).localeCompare(String(a.startedAt))).slice(0,5);
+  if(acts.length)h+='<div class="panel"><h3>Recent activity</h3><ul class="plain">'+acts.map(a=>'<li>'+esc(a.label||a.kind)+': '+esc(a.status)+(a.result?'. '+esc(a.result):'')+'</li>').join("")+'</ul></div>';
+  v.innerHTML=h;
+}
+function nextId(type){let n=0;S.items.forEach(i=>{const m=String(i.id).match(new RegExp("^"+type+"-(\\d+)$"));if(m)n=Math.max(n,+m[1])});arr(S.main.retiredIds).forEach(r=>{const m=String(r).match(new RegExp("^"+type+"-(\\d+)$"));if(m)n=Math.max(n,+m[1])});return type+"-"+String(n+1).padStart(2,"0")}
+function editRow(it,isNew,type){
+  const t=it.type||type,cols=t==="D"?6:7;
+  const di=(k,lbl)=>{const d=it[k]||{};return '<label class="f">'+lbl+' date<input data-f="'+k+'.text" value="'+esc(d.text||"")+'" placeholder="13 Mar 2026, On or before 2 Oct 2026, or Confirm"></label><label class="f">'+lbl+' record link<input data-f="'+k+'.url" value="'+esc(d.url||"")+'" placeholder="https://..."></label><label class="f">'+lbl+' link text<input data-f="'+k+'.label" value="'+esc(d.label||"")+'" placeholder="Chat, 13 Mar 2026"></label>'};
+  return '<tr class="edrow"><td colspan="'+(cols+1)+'"><div class="grid2">'+
+    (isNew?'<label class="f">ID<input data-f="id" value="'+esc(it.id)+'"></label>':'')+
+    '<label class="f">Item<input data-f="name" value="'+esc(it.name||"")+'"></label>'+
+    '<label class="f">Parent ID (for a sub-item)<input data-f="parent" value="'+esc(it.parent||"")+'" placeholder="S-01"></label></div>'+
+    '<label class="f">What it is<textarea data-f="what">'+esc(it.what||"")+'</textarea></label>'+
+    '<div class="grid2">'+di("conceived","Conceived")+(t!=="D"?di("built","Built"):"")+'</div>'+
+    '<label class="f">Notes<textarea data-f="notes">'+esc(it.notes||"")+'</textarea></label>'+
+    '<div class="rowb"><button class="btn primary sm" data-act="save-row" data-type="'+t+'" data-new="'+(isNew?1:0)+'" data-id="'+esc(it._doc||"")+'" type="button">Save</button><button class="btn sm" data-act="cancel-row" type="button">Cancel</button>'+(!isNew?'<button class="btn danger sm" data-act="del-row" data-id="'+esc(it._doc)+'" type="button">Remove item</button>':'')+msgSpan("row")+'</div></td></tr>';
+}
+function renderApproval(){
+  const v=$("view-approval");
+  if(!S.loaded){v.innerHTML="";return}
+  const L=S.lists||{};
+  let h='<div class="panel"><h3>How to use this list</h3><p style="margin:0">Set the Include column on each row to In, Out or Discuss, and correct any date you know better. Rows marked In move to the Register with full detail, then to the Exhibit in general terms.</p><ul class="plain"><li>Conceived is the earliest dated record of the idea. Built is the earliest dated record of a working version. "On or before" means the record proves the date was no later than that.</li><li>"Confirm" means no dated record was found. Fill in the date, or a date range you are confident of.</li><li>Each ID stays with its item for good: M for methodologies, S for software built, D for designed but not built.</li></ul></div>';
+  TYPES.forEach(([t,head,line])=>{
+    const its=S.items.filter(i=>i.type===t).sort(sortItems);const isD=t==="D";
+    h+='<div class="panel"><div class="bar"><div><h3>'+head+'</h3><p class="note">'+line+'</p></div>'+(S.canWrite?'<button class="btn sm" data-act="add-row" data-type="'+t+'" type="button">Add an item</button>':'')+'</div><div class="tw"><table class="t"><thead><tr><th>ID</th><th>Item</th><th>What it is</th><th>Conceived</th>'+(isD?'':'<th>Built</th>')+'<th>Include</th><th>Notes</th><th></th></tr></thead><tbody>';
+    if(S.edit&&S.edit.isNew&&S.edit.type===t)h+=editRow({id:nextId(t),type:t},true,t);
+    if(!its.length&&!(S.edit&&S.edit.isNew&&S.edit.type===t))h+='<tr><td colspan="'+(isD?7:8)+'" class="empty">None yet.</td></tr>';
+    its.forEach(i=>{
+      if(S.edit&&!S.edit.isNew&&S.edit.doc===i._doc){h+=editRow(i,false);return}
+      const sub=!!i.parent;
+      h+='<tr'+(sub?' class="subrow"':'')+'><td class="idc">'+(sub?'↳ ':'')+esc(i.id)+'</td><td>'+esc(i.name)+'</td><td>'+esc(i.what)+'</td><td>'+dateHtml(i.conceived)+'</td>'+(isD?'':'<td>'+dateHtml(i.built)+'</td>')+
+        '<td>'+(S.canWrite?'<select data-act="incl" data-id="'+esc(i._doc)+'" aria-label="Include '+esc(i.id)+'">'+["","In","Out","Discuss"].map(o=>'<option value="'+o+'"'+((i.include||"")===o?" selected":"")+'>'+(o||"Choose")+'</option>').join("")+'</select>':inclPill(i.include))+'</td><td>'+esc(i.notes)+'</td><td>'+(S.canWrite?'<button class="btn sm" data-act="edit-row" data-id="'+esc(i._doc)+'" type="button">Edit</button>':'')+'</td></tr>';
+    });
+    h+='</tbody></table></div></div>';
+  });
+  h+='<div class="panel"><h3>Found, but not listed as inventions</h3><p class="note">Claude found these in your work but did not count them as inventions, because they are outputs or reference material. If one of them is something you created and want listed, add it above.</p>'+(arr(L.found).length?'<ul class="plain">'+arr(L.found).map(f=>'<li>'+esc(f)+'</li>').join("")+'</ul>':'<p class="empty" style="margin:0">None.</p>')+'</div>';
+  h+='<div class="panel"><div class="bar"><h3>For legal counsel before you sign</h3>'+(S.canWrite?'<button class="btn sm" data-act="edit-counsel" type="button">'+(S.edit&&S.edit.counsel?'Close':'Edit')+'</button>':'')+'</div>';
+  if(S.edit&&S.edit.counsel){h+='<label class="f">One question per line. Start each with a short label and a colon.<textarea id="counsel-text" style="min-height:140px">'+esc(arr(L.counsel).map(q=>(q.label?q.label+": ":"")+(q.question||"")).join("\n"))+'</textarea></label><div class="rowb"><button class="btn primary sm" data-act="save-counsel" type="button">Save</button>'+msgSpan("counsel")+'</div>'}
+  else h+=arr(L.counsel).length?'<ul class="plain">'+arr(L.counsel).map(q=>'<li><b>'+esc(q.label||"Question")+'.</b> '+esc(q.question)+'</li>').join("")+'</ul>':'<p style="margin:0">No ownership questions were found.</p>';
+  h+='</div><div class="panel"><h3>Where the dates come from</h3><p style="margin:0">'+esc(L.sources||"Not recorded yet.")+'</p><p class="note">Your own records, such as file dates, emails or code history, can move a date earlier.</p></div>';
+  v.innerHTML=h;
+}
+function regField(i,k,lbl){return '<label class="f">'+lbl+'<textarea data-r="'+k+'">'+esc((S.regDraft[i._doc]||{})[k]!=null?S.regDraft[i._doc][k]:(i[k]||""))+'</textarea></label>'}
+function renderRegister(){
+  const v=$("view-register");if(!S.loaded){v.innerHTML="";return}
+  const ins=S.items.filter(i=>/^in$/i.test(i.include)).sort(sortItems);
+  let h='<div class="panel"><h3>Register</h3><p style="margin:0">One entry for every item marked In on the Approval List. Each entry covers the problem the item solves, the value it was designed to bring, how it works and what sets it apart, so any item can be explained without going back to the original work. Items marked Out are not carried here.</p></div>';
+  if(!ins.length)h+='<div class="panel"><p class="empty" style="margin:0">No items are marked In yet.</p></div>';
+  ins.forEach(i=>{
+    const ed=S.regEdit===i._doc;
+    h+='<div class="panel" id="reg-'+esc(i._doc)+'"><div class="bar"><h3>'+esc(i.id)+' '+esc(i.name)+'</h3>'+(S.canWrite&&!ed?'<span class="rowb">'+(S.sample&&!(i.problem||i.how)?'<button class="btn sm" data-act="reg-draft" data-id="'+esc(i._doc)+'" type="button">Draft with Claude</button>':'')+'<button class="btn sm" data-act="reg-edit" data-id="'+esc(i._doc)+'" type="button">Edit</button></span>':'')+'</div>';
+    h+='<div class="tw"><table class="t"><thead><tr><th>Type</th><th>Status</th><th>Conceived</th><th>Built</th></tr></thead><tbody><tr><td>'+esc(TYPE_NAME[i.type]||i.type)+'</td><td>'+esc(i.status||(i.type==="D"?"Designed, not built":"Built"))+'</td><td>'+dateHtml(i.conceived)+'</td><td>'+(i.type==="D"?"Not built":dateHtml(i.built))+'</td></tr></tbody></table></div>';
+    if(ed){
+      h+='<div class="reg">'+regField(i,"problem","Problem it solves")+regField(i,"value","Value it was designed to bring")+regField(i,"how","How it works")+regField(i,"apart","What sets it apart")+regField(i,"related","Related (IDs and item names only)")+
+        '<label class="f">Design documents (one per line: link text | link)<textarea data-r="designDocsText">'+esc((S.regDraft[i._doc]||{}).designDocsText!=null?S.regDraft[i._doc].designDocsText:arr(i.designDocs).map(d=>(d.label||"")+" | "+(d.url||"")).join("\n"))+'</textarea></label>'+
+        '<label class="f">Exhibit description (one or two general sentences, nothing confidential)<textarea data-r="exhibitDesc">'+esc((S.regDraft[i._doc]||{}).exhibitDesc!=null?S.regDraft[i._doc].exhibitDesc:(i.exhibitDesc||""))+'</textarea></label>'+
+        '<div class="rowb"><button class="btn primary sm" data-act="reg-save" data-id="'+esc(i._doc)+'" type="button">Save</button><button class="btn sm" data-act="reg-cancel" type="button">Cancel</button>'+msgSpan("reg")+'</div></div>';
+    } else {
+      const P=(k,l)=>'<p><span class="lbl">'+l+'.</span> '+(i[k]?esc(i[k]):'<span class="empty">Not written yet.</span>')+'</p>';
+      h+='<div class="reg">'+P("problem","Problem it solves")+P("value","Value it was designed to bring")+P("how","How it works")+P("apart","What sets it apart")+'<p><span class="lbl">Related.</span> '+(i.related?esc(i.related):'None.')+'</p>'+(arr(i.designDocs).length?'<p><span class="lbl">Design documents.</span> '+arr(i.designDocs).map(d=>/^https?:\/\//.test(d.url||"")?'<a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.label||"Design document")+'</a>':esc(d.label)).join(", ")+'</p>':'')+'</div>';
+    }
+    h+='</div>';
+  });
+  v.innerHTML=h;
+}
+function exhibitItems(){return S.items.filter(i=>/^in$/i.test(i.include)).sort(sortItems)}
+function renderExhibit(){
+  const v=$("view-exhibit");if(!S.loaded){v.innerHTML="";return}
+  const m=S.main,name=m.name||"[Your name]";
+  let h='<div class="bar"><span class="rowb">'+(S.canWrite?'<button class="btn" data-act="exh-edit" type="button">'+(S.exhEdit?'Done editing':'Edit company, date and descriptions')+'</button>':'')+'</span><span class="rowb">'+msgSpan("exh")+'<button class="btn primary" data-act="dl-word" type="button">Download Word</button><button class="btn primary" data-act="dl-pdf" type="button">Download PDF</button></span></div>';
+  h+='<div class="exh"><h2>Exhibit: List of Prior Inventions</h2><div class="tw"><table class="t" style="max-width:640px"><tbody>'+
+    '<tr><th style="width:200px">Name</th><td>'+esc(name)+'</td></tr>'+
+    '<tr><th>Company</th><td>'+(S.exhEdit?'<input id="ex-company" value="'+esc(m.company||"")+'">':esc(m.company||""))+'</td></tr>'+
+    '<tr><th>Employment start date</th><td>'+(S.exhEdit?'<input id="ex-start" value="'+esc(m.startDate||"")+'" placeholder="1 December 2026">':esc(m.startDate||""))+'</td></tr>'+
+    '<tr><th>Date of this list</th><td>'+esc(todayLong())+'</td></tr></tbody></table></div>';
+  h+='<p style="margin:0">'+esc(exhibitPara())+'</p>';
+  const its=exhibitItems();
+  ["M","S","D"].forEach(t=>{const list=its.filter(i=>i.type===t);if(!list.length)return;
+    h+='<h3>'+EXH_HEAD[t]+'</h3><div class="tw"><table class="t"><thead><tr><th style="width:110px">ID</th><th style="width:200px">Title</th><th style="width:130px">Date</th><th>Description</th></tr></thead><tbody>'+
+      list.map(i=>'<tr'+(i.parent?' class="subrow"':'')+'><td class="idc">'+(i.parent?'↳ ':'')+esc(i.id)+'</td><td><b>'+esc(i.name)+'</b></td><td>'+esc(monthYear(i.conceived,i.exhibitDate))+'</td><td>'+(S.exhEdit?'<textarea data-exd="'+esc(i._doc)+'">'+esc(i.exhibitDesc||"")+'</textarea>':(i.exhibitDesc?esc(i.exhibitDesc):'<span class="empty">No description yet. Edit to add one.</span>'))+'</td></tr>').join("")+'</tbody></table></div>'});
+  if(!its.length)h+='<p class="empty">No items are marked In yet.</p>';
+  h+='<div class="sig"><div>Typed name</div><div>Signature</div><div>Date</div></div></div>';
+  if(S.exhEdit)h+='<div class="rowb"><button class="btn primary" data-act="exh-save" type="button">Save</button>'+msgSpan("exh2")+'</div>';
+  h+='<p class="note">Download saves the Exhibit only. Check the Exhibit for names of people and companies before you hand it over, and review it with your lawyer before you sign anything.</p>';
+  v.innerHTML=h;
+}
+function exhibitPara(){const n=S.main.name||"[Your name]";return "Each item below was conceived, developed or reduced to practice by "+n+" before the employment start date shown above, and is owned by "+n+". Descriptions are general and do not disclose confidential details. Dated records supporting each item are kept separately and are available on request. Item numbers match the owner's internal register. Gaps in the numbering are items that were merged into other items or are not claimed as inventions."}
+
+/* ---------- writes ---------- */
+function collectRow(tr){const o={};tr.querySelectorAll("[data-f]").forEach(f=>{const k=f.dataset.f,val=f.value.trim();if(k.includes(".")){const[a,b]=k.split(".");o[a]=o[a]||{};o[a][b]=val}else o[k]=val});return o}
+async function addRevision(desc){
+  const m=S.main;let ver=m.docVersion||"0.1";const parts=String(ver).match(/^(\d+)\.(\d+)/);
+  if(parts&&+parts[1]>=1)ver=parts[1]+"."+(+parts[2]+1);
+  const d=new Date(),id="r-"+d.getTime();
+  await S.db.doc("revisions/"+id).set({version:ver,date:today({year:"numeric",month:"2-digit",day:"2-digit"}).replace(/(\d+)\/(\d+)\/(\d+)/,"$3-$1-$2"),time:today({hour:"2-digit",minute:"2-digit",hour12:false}),author:m.name||"Owner",description:desc,approvedBy:m.name||"Owner",order:d.getTime()});
+  if(parts&&+parts[1]>=1)await S.db.doc("settings/main").update({docVersion:ver});
+}
+document.addEventListener("change",async e=>{
+  const s=e.target.closest('[data-act="incl"]');if(!s||!S.db)return;
+  try{await S.db.doc("items/"+s.dataset.id).update({include:s.value,updatedAt:nowIso()})}catch(err){alert2("Could not save. Try again.")}
+});
+function alert2(t){setMsg("row",t,true)}
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-act]");if(!b||b.tagName==="SELECT")return;
+  const act=b.dataset.act;
+  if(act==="add-row"){S.edit={isNew:true,type:b.dataset.type};renderApproval();return}
+  if(act==="edit-row"){S.edit={doc:b.dataset.id};renderApproval();return}
+  if(act==="cancel-row"){S.edit=null;renderApproval();return}
+  if(act==="save-row"){
+    const tr=b.closest("tr"),o=collectRow(tr),isNew=b.dataset.new==="1",type=b.dataset.type;
+    if(!o.name){setMsg("row","Give the item a name.",true);return}
+    b.disabled=true;
+    try{
+      if(isNew){
+        const id=(o.id||nextId(type)).toUpperCase(),doc=docId(id);
+        if(S.items.some(i=>i._doc===doc)){setMsg("row","That ID is already used.",true);b.disabled=false;return}
+        await S.db.doc("items/"+doc).set(Object.assign({id,type,include:"",createdAt:nowIso(),updatedAt:nowIso()},o,{id}));
+        await addRevision("Added "+id+" "+o.name);
+      } else {
+        const it=S.items.find(i=>i._doc===b.dataset.id);
+        await S.db.doc("items/"+it._doc).update(Object.assign(o,{updatedAt:nowIso()}));
+      }
+      S.edit=null;renderApproval();
+    }catch(err){b.disabled=false;setMsg("row","Could not save. Try again.",true)}
+    return}
+  if(act==="del-row"){
+    const it=S.items.find(i=>i._doc===b.dataset.id);if(!it)return;
+    if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="Click again to remove "+it.id;return}
+    try{await S.db.doc("items/"+it._doc).delete();await S.db.doc("settings/main").update({retiredIds:arr(S.main.retiredIds).concat([it.id])});await addRevision("Removed "+it.id+" "+it.name);S.edit=null;renderApproval()}catch(err){setMsg("row","Could not remove. Try again.",true)}
+    return}
+  if(act==="edit-counsel"){S.edit=S.edit&&S.edit.counsel?null:{counsel:true};renderApproval();return}
+  if(act==="save-counsel"){
+    const lines=$("counsel-text").value.split("\n").map(x=>x.trim()).filter(Boolean).map(x=>{const i=x.indexOf(":");return i>0&&i<60?{label:x.slice(0,i).trim(),question:x.slice(i+1).trim()}:{label:"",question:x}});
+    try{await S.db.doc("settings/lists").set(Object.assign({},S.lists,{counsel:lines}));S.edit=null;renderApproval()}catch(err){setMsg("counsel","Could not save.",true)}
+    return}
+  if(act==="reg-edit"){S.regEdit=b.dataset.id;renderRegister();return}
+  if(act==="reg-cancel"){delete S.regDraft[S.regEdit];S.regEdit=null;renderRegister();return}
+  if(act==="reg-save"){
+    const box=$("reg-"+b.dataset.id),o={};box.querySelectorAll("[data-r]").forEach(f=>o[f.dataset.r]=f.value.trim());
+    o.designDocs=o.designDocsText.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split("|");return{label:(p[0]||"").trim(),url:(p[1]||"").trim()}});delete o.designDocsText;
+    try{await S.db.doc("items/"+b.dataset.id).update(Object.assign(o,{updatedAt:nowIso()}));delete S.regDraft[b.dataset.id];S.regEdit=null;renderRegister()}catch(err){setMsg("reg","Could not save. Try again.",true)}
+    return}
+  if(act==="reg-draft"){
+    const it=S.items.find(i=>i._doc===b.dataset.id);if(!it||!S.sample)return;
+    b.disabled=true;b.textContent="Drafting...";
+    try{
+      const prompt="Draft a prior inventions Register entry for one item. Use only the facts given here; where something is unknown, say what is unknown. Plain, connected sentences, no em dashes, no buzzwords. Name no people and no companies or clients.\n\nItem (JSON):\n"+JSON.stringify({id:it.id,type:TYPE_NAME[it.type],name:it.name,what:it.what,notes:it.notes,conceived:it.conceived&&it.conceived.text,built:it.built&&it.built.text})+
+        '\n\nReply with only one JSON object: {"problem": string, "value": string, "how": string, "apart": string, "exhibitDesc": string (one or two general sentences, nothing confidential)}';
+      const r=await S.sample.json(prompt,{cache:false});
+      S.regDraft[it._doc]={problem:String(r.problem||""),value:String(r.value||""),how:String(r.how||""),apart:String(r.apart||""),exhibitDesc:String(r.exhibitDesc||it.exhibitDesc||"")};
+      Object.keys(S.regDraft[it._doc]).forEach(k=>S.regDraft[it._doc][k]=S.regDraft[it._doc][k].replace(/\s*—\s*/g,", "));
+      S.regEdit=it._doc;renderRegister();setMsg("reg","Draft ready. Review it, then Save.");
+    }catch(err){b.disabled=false;b.textContent="Draft with Claude";}
+    return}
+  if(act==="exh-edit"){S.exhEdit=!S.exhEdit;renderExhibit();return}
+  if(act==="exh-save"){
+    try{
+      await S.db.doc("settings/main").update({company:$("ex-company").value.trim(),startDate:$("ex-start").value.trim()});
+      const tasks=[];document.querySelectorAll("[data-exd]").forEach(t=>{const it=S.items.find(i=>i._doc===t.dataset.exd);if(it&&(it.exhibitDesc||"")!==t.value.trim())tasks.push(S.db.doc("items/"+it._doc).update({exhibitDesc:t.value.trim(),updatedAt:nowIso()}))});
+      await Promise.all(tasks);S.exhEdit=false;renderExhibit();
+    }catch(err){setMsg("exh2","Could not save. Try again.",true)}
+    return}
+  if(act==="dl-word"){dlWord();return}
+  if(act==="dl-pdf"){dlPdf();return}
+});
+
+/* ---------- downloads ---------- */
+function loadScript(src,test){return new Promise((res,rej)=>{if(test())return res();const s=document.createElement("script");s.src=src;s.onload=()=>test()?res():rej(new Error("load"));s.onerror=()=>rej(new Error("load"));document.head.appendChild(s)})}
+const fileBase=()=>(S.main.name?S.main.name+" - ":"")+"Prior Inventions Exhibit";
+async function save(name,blob){if(!S.dl){setMsg("exh","Download is not available in this view.",true);return}try{await S.dl.save({filename:name,data:blob});setMsg("exh","Downloaded.")}catch(e){setMsg("exh",e&&e.code==="declined"?"Download cancelled.":"Download is not available in this view.",true)}}
+async function dlWord(){
+  setMsg("exh","Preparing the Word file...");
+  try{await loadScript("https://cdn.jsdelivr.net/npm/docx@9.16.0/dist/index.iife.js",()=>!!window.docx)}catch(e){setMsg("exh","Could not load the Word tool. Try again.",true);return}
+  const D=window.docx,m=S.main,W=9360,cellM={top:60,bottom:60,left:100,right:100};
+  const P=(t,o)=>new D.Paragraph(Object.assign({children:[new D.TextRun(Object.assign({text:String(t||"")},o&&o.run))],spacing:{after:120}},o&&o.p));
+  const cell=(t,w,o)=>new D.TableCell({width:{size:w,type:D.WidthType.DXA},margins:cellM,shading:o&&o.fill?{type:D.ShadingType.CLEAR,fill:o.fill,color:"auto"}:undefined,children:[new D.Paragraph({children:[new D.TextRun({text:String(t||""),bold:!!(o&&o.bold),size:20})]})]});
+  const kids=[new D.Paragraph({heading:D.HeadingLevel.HEADING_1,children:[new D.TextRun("Exhibit: List of Prior Inventions")]})];
+  kids.push(new D.Table({width:{size:W,type:D.WidthType.DXA},columnWidths:[2800,6560],rows:[["Name",m.name||""],["Company",m.company||""],["Employment start date",m.startDate||""],["Date of this list",todayLong()]].map(r=>new D.TableRow({children:[cell(r[0],2800,{bold:true,fill:"E2EEF3"}),cell(r[1],6560)]}))}));
+  kids.push(P(""),P(exhibitPara()));
+  const its=exhibitItems(),cw=[1300,2300,1500,4260];
+  ["M","S","D"].forEach(t=>{const list=its.filter(i=>i.type===t);if(!list.length)return;
+    kids.push(new D.Paragraph({heading:D.HeadingLevel.HEADING_2,children:[new D.TextRun(EXH_HEAD[t])]}));
+    const rows=[new D.TableRow({tableHeader:true,cantSplit:true,children:["ID","Title","Date","Description"].map((h,k)=>cell(h,cw[k],{bold:true,fill:"E2EEF3"}))})];
+    list.forEach(i=>{const f=i.parent?"F1F3F4":undefined;rows.push(new D.TableRow({cantSplit:true,children:[cell((i.parent?"↳ ":"")+i.id,cw[0],{bold:true,fill:f}),cell(i.name,cw[1],{bold:true,fill:f}),cell(monthYear(i.conceived,i.exhibitDate),cw[2],{fill:f}),cell(i.exhibitDesc||"",cw[3],{fill:f})]}))});
+    kids.push(new D.Table({width:{size:W,type:D.WidthType.DXA},columnWidths:cw,rows}));});
+  ["Typed name","Signature","Date"].forEach(l=>kids.push(new D.Paragraph({spacing:{before:480},border:{bottom:{style:D.BorderStyle.SINGLE,size:6,color:"18232B",space:1}},children:[new D.TextRun({text:l,size:18,color:"5B6A74"})]})));
+  const doc=new D.Document({creator:m.name||"",title:"Exhibit: List of Prior Inventions",styles:{default:{document:{run:{font:"Arial",size:22}}},paragraphStyles:[{id:"Heading1",name:"Heading 1",basedOn:"Normal",next:"Normal",quickFormat:true,run:{font:"Arial",size:32,bold:true},paragraph:{spacing:{before:120,after:200},keepNext:true}},{id:"Heading2",name:"Heading 2",basedOn:"Normal",next:"Normal",quickFormat:true,run:{font:"Arial",size:26,bold:true},paragraph:{spacing:{before:240,after:120},keepNext:true}}]},sections:[{properties:{page:{size:{width:12240,height:15840},margin:{top:1440,bottom:1440,left:1440,right:1440}}},children:kids}]});
+  await save(fileBase()+".docx",await D.Packer.toBlob(doc));
+}
+async function dlPdf(){
+  setMsg("exh","Preparing the PDF...");
+  try{await loadScript("https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js",()=>!!(window.jspdf&&window.jspdf.jsPDF));await loadScript("https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js",()=>{try{return typeof new window.jspdf.jsPDF().autoTable==="function"}catch(e){return false}})}catch(e){setMsg("exh","Could not load the PDF tool. Try again.",true);return}
+  const m=S.main,doc=new window.jspdf.jsPDF({unit:"pt",format:"letter"}),L=54,Wd=504;let y=60;
+  const clean=s=>String(s||"").replace(/[‘’]/g,"'").replace(/[“”]/g,'"').replace(/[–—]/g,"-");
+  doc.setFont("helvetica","bold");doc.setFontSize(16);doc.text("Exhibit: List of Prior Inventions",L,y);y+=14;
+  const hs={fillColor:[226,238,243],textColor:[24,35,43],fontStyle:"bold"},base={font:"helvetica",fontSize:9.5,cellPadding:5,lineColor:[217,224,228],lineWidth:0.5,textColor:[24,35,43],valign:"top"};
+  doc.autoTable({startY:y,margin:{left:L,right:L},tableWidth:340,theme:"grid",styles:base,columnStyles:{0:Object.assign({cellWidth:130},hs)},body:[["Name",m.name||""],["Company",m.company||""],["Employment start date",m.startDate||""],["Date of this list",todayLong()]].map(r=>r.map(clean))});
+  y=doc.lastAutoTable.finalY+16;doc.setFont("helvetica","normal");doc.setFontSize(10);const lines=doc.splitTextToSize(clean(exhibitPara()),Wd);doc.text(lines,L,y);y+=lines.length*13+8;
+  const its=exhibitItems();
+  ["M","S","D"].forEach(t=>{const list=its.filter(i=>i.type===t);if(!list.length)return;
+    if(y>700){doc.addPage();y=60}
+    doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text(EXH_HEAD[t],L,y+6);
+    doc.autoTable({startY:y+14,margin:{left:L,right:L},theme:"grid",styles:base,headStyles:hs,columnStyles:{0:{cellWidth:70,fontStyle:"bold"},1:{cellWidth:120,fontStyle:"bold"},2:{cellWidth:80}},head:[["ID","Title","Date","Description"]],
+      body:list.map(i=>[(i.parent?"  > ":"")+i.id,i.name,monthYear(i.conceived,i.exhibitDate),i.exhibitDesc||""].map(clean)),
+      didParseCell:d=>{if(d.section==="body"&&list[d.row.index]&&list[d.row.index].parent)d.cell.styles.fillColor=[241,243,244]}});
+    y=doc.lastAutoTable.finalY+20;});
+  if(y>640){doc.addPage();y=60}
+  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(91,106,116);
+  ["Typed name","Signature","Date"].forEach(l=>{y+=34;doc.setDrawColor(24,35,43);doc.line(L,y,L+300,y);doc.text(l,L,y+11)});
+  await save(fileBase()+".pdf",doc.output("blob"));
+}
+
+/* ---------- data ---------- */
+function docs(s){return s.docs.map(d=>Object.assign({},d.data(),{_doc:d.id}))}
+const editing=()=>{const a=document.activeElement;return a&&(a.matches("input,textarea")||(a.tagName==="SELECT"&&!a.dataset.act))};
+let pending=false;
+function safeRender(){if(editing()||S.edit||S.regEdit||S.exhEdit){pending=true;renderUpdate();renderDashboard();return}renderAll()}
+document.addEventListener("focusout",()=>setTimeout(()=>{if(pending&&!editing()&&!S.edit&&!S.regEdit&&!S.exhEdit){pending=false;renderAll()}},120));
+showTab(location.hash.replace("#",""));
+renderAll();
+(async()=>{
+  const [d,u,s,dw,m]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("sample"),claude.use("downloads"),claude.use("mcp")]);
+  S.sample=s;S.dl=dw;S.mcp=m;
+  if(u){try{if(await u.can("data.write")===false)S.canWrite=false}catch(_){}}
+  if(!d){S.db=false;S.loaded=false;renderAll();return}
+  S.db=d;
+  const t=setTimeout(()=>{if(!S.loaded){$("view-dashboard").innerHTML='<div class="panel"><p class="empty">Still loading. If nothing appears, reload the page.</p></div>'}},10000);
+  let got=0;const ready=()=>{if(++got>=2){S.loaded=true;clearTimeout(t)}safeRender()};
+  const fail=()=>{};
+  d.collection("items").onSnapshot(sn=>{S.items=docs(sn);ready()},fail);
+  d.collection("settings").onSnapshot(sn=>{const all={};docs(sn).forEach(x=>all[x._doc]=x);S.main=all.main||{};S.lists=all.lists||{};S.tasks=all.tasks||{};S.upd=all.update||{};ready()},fail);
+  d.collection("revisions").onSnapshot(sn=>{S.revs=docs(sn).sort((a,b)=>(a.order||0)-(b.order||0));safeRender()},fail);
+  d.collection("activity").onSnapshot(sn=>{S.acts=docs(sn);safeRender()},fail);
+})();
+})();
+</script>
+</body></html>
