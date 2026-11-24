@@ -3,7 +3,7 @@ name: prior-inventions-keep-current
 description: Use when I finish building or designing something new (an app, tool, skill, prompt or method), or ask to add something to my Prior Inventions page.
 ---
 
-# Prior Inventions: Keep It Current (version 2.0)
+# Prior Inventions: Keep It Current (version 2.0.1)
 
 My request: "Keep my Prior Inventions page current as I build new things."
 
@@ -15,14 +15,14 @@ My request: "Keep my Prior Inventions page current as I build new things."
 
 If any of these is still in square brackets, look among my artifacts for a page titled "[my name] - Prior Inventions" and use it. If you cannot find it, ask me once for the link.
 
-Read and write my page's data with the ArtifactData tool (load it via ToolSearch if needed), using my page link. The page keeps each item as a document in the "items" collection, revision history rows in "revisions", and its version and my details in "settings/main".
+Read and write my page's data with the artifact data tools (named ArtifactData in some sessions, and db_get, db_list and db_write in others; load them via ToolSearch if needed), using my page link. The page keeps each item as a document in the "items" collection, revision history rows in "revisions", and its version and my details in "settings/main".
 
 ## When this runs
 
 - When I start building or designing something new: do step 1.
 - When I finish a new build or design, or say "add this to my Prior Inventions": do steps 2 to 5.
 - When I make a material change to something already on my list: do step 1 for the change, then offer to update its Register entry.
-- When I say "Update my Prior Inventions skill": follow "Updates" below.
+- When I say "Update my Prior Inventions skill" or "Update my Prior Inventions page": follow "Updates" below.
 
 ## 1. Document control on every new build
 
@@ -69,6 +69,8 @@ Ask whether I want a design document for the item. If I do, create it as a Claud
 
 ## Updates
 
+When I say "Update my Prior Inventions page": get document "settings/tasks" on my page. If it has an "update" task ID, write document "activity/a-<timestamp>" with kind "update", label "Update to the latest version", status "running" and startedAt ISO now. Then start that scheduled task with a two-line message: "ACTIVITY ID: a-<timestamp>" on the first line and "MODE: APPLY UPDATE" on the second. Tell me to reload my page when the notification arrives. If there is no task, or you cannot start it, follow the APPLY MODE steps in https://raw.githubusercontent.com/RevCeleris/prior-inventions/main/tasks/update.txt yourself, with my page link and time zone, skipping any step about a scheduled task.
+
 When I say "Update my Prior Inventions skill", download https://raw.githubusercontent.com/RevCeleris/prior-inventions/main/skill/prior-inventions-keep-current/SKILL.md with the Bash tool using curl -fsSL (or WebFetch if curl fails). Offer it to me as an update to this skill, keeping the values I filled in under "My setup". After I save it, update settings/update on my page with skillInstalled set to the version in the new skill's title.
 
 ## Reply to me
@@ -77,4 +79,4 @@ Keep it short: one line saying what you added, with the link to my page, then an
 
 ---
 
-Prior Inventions Keep It Current skill, version 2.0. (c) 2026 Rich Henderson. Shared under CC BY-NC 4.0: free to use and adapt for your own records, with credit. Not for resale or use in a paid product. Not legal advice.
+Prior Inventions Keep It Current skill, version 2.0.1. (c) 2026 Rich Henderson. Shared under CC BY-NC 4.0: free to use and adapt for your own records, with credit. Not for resale or use in a paid product. Not legal advice.

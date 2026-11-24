@@ -95,7 +95,7 @@ footer{text-align:center;font-size:12px;color:var(--muted)}
 <script>
 (function(){
 "use strict";
-const APP_VERSION="2.0";
+const APP_VERSION="2.0.1";
 const TYPES=[["M","Methodologies","Methods and frameworks that people apply, with or without software."],["S","Software built","Working apps, AI agents, skills and prompts, at least partly built."],["D","Designed, not built","Conceived and documented, with no working version yet."]];
 const EXH_HEAD={M:"Methodologies",S:"Software",D:"Designs and concepts"};
 const TYPE_NAME={M:"Methodology",S:"Software",D:"Design"};
@@ -139,7 +139,7 @@ function renderUpdate(){
   if(!u.version||vcmp(u.version,APP_VERSION)<=0||u.dismissed===u.version||!S.canWrite){b.hidden=true;return}
   b.hidden=false;b.className="banner";
   const canRun=!!(S.mcp&&S.tasks.update);
-  b.innerHTML='<span><b>Version '+esc(u.version)+' is ready.</b> '+esc(u.notes||"")+(canRun?'':' To install it, start a new chat in Claude and send: Update my Prior Inventions.')+'</span><span class="rowb">'+(canRun?'<button class="btn primary" id="update-now" type="button">Update now</button>':'')+'<button class="btn" id="update-later" type="button">Not now</button><span id="update-msg" class="note"></span></span>';
+  b.innerHTML='<span><b>Version '+esc(u.version)+' is ready.</b> '+esc(u.notes||"")+(canRun?'':' To install it, start a new chat in Claude and send: Update my Prior Inventions page.')+'</span><span class="rowb">'+(canRun?'<button class="btn primary" id="update-now" type="button">Update now</button>':'')+'<button class="btn" id="update-later" type="button">Not now</button><span id="update-msg" class="note"></span></span>';
   const un=$("update-now");if(un)un.onclick=async()=>{un.disabled=true;$("update-msg").textContent="Starting the update...";
     try{const id="a-"+Date.now();await S.db.doc("activity/"+id).set({kind:"update",label:"Update to version "+u.version,status:"running",startedAt:nowIso()});
       await S.mcp.callTool("Claude Code Remote","fire_trigger",{trigger_id:S.tasks.update,text:"ACTIVITY ID: "+id+"\nMODE: APPLY UPDATE\nVERSION: "+u.version},{cache:false});
@@ -254,10 +254,10 @@ function exhibitPara(){const n=S.main.name||"[Your name]";return "Each item belo
 function collectRow(tr){const o={};tr.querySelectorAll("[data-f]").forEach(f=>{const k=f.dataset.f,val=f.value.trim();if(k.includes(".")){const[a,b]=k.split(".");o[a]=o[a]||{};o[a][b]=val}else o[k]=val});return o}
 async function addRevision(desc){
   const m=S.main;let ver=m.docVersion||"0.1";const parts=String(ver).match(/^(\d+)\.(\d+)/);
-  if(parts&&+parts[1]>=1)ver=parts[1]+"."+(+parts[2]+1);
+  if(parts)ver=parts[1]+"."+(+parts[2]+1);
   const d=new Date(),id="r-"+d.getTime();
   await S.db.doc("revisions/"+id).set({version:ver,date:today({year:"numeric",month:"2-digit",day:"2-digit"}).replace(/(\d+)\/(\d+)\/(\d+)/,"$3-$1-$2"),time:today({hour:"2-digit",minute:"2-digit",hour12:false}),author:m.name||"Owner",description:desc,approvedBy:m.name||"Owner",order:d.getTime()});
-  if(parts&&+parts[1]>=1)await S.db.doc("settings/main").update({docVersion:ver});
+  if(parts)await S.db.doc("settings/main").update({docVersion:ver});
 }
 document.addEventListener("change",async e=>{
   const s=e.target.closest('[data-act="incl"]');if(!s||!S.db)return;
