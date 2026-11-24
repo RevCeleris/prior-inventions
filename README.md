@@ -8,7 +8,7 @@ Free for personal use. Get it at https://doovli.app/prior-inventions.html
 
 | Path | What it is |
 |---|---|
-| download/Prior Inventions v2.0.3.zip | The package people download: Install Guide, Setup Prompt, the page file and the Keep It Current skill. |
+| download/Prior Inventions.zip | The package people download (always the latest version; the Doovli link points here): Install Guide, Setup Prompt, the page file and the Keep It Current skill. |
 | prior-inventions.html | The current page. The Update now button installs this file. |
 | version.json | The current version number and release note. The monthly check reads it. |
 | tasks/update.txt | The current instructions for the monthly update task. |
