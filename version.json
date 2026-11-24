@@ -1,6 +1,6 @@
 {
-  "version": "2.0.2",
+  "version": "2.0.3",
   "skillVersion": "2.0.2",
-  "notes": "Dates you already settled on the Exhibit no longer count as dates to confirm, and the personal-use notice is easier to see.",
+  "notes": "The monthly update check is now limited to your page and its own task, and never uses your other connected apps. Also: dates you already settled on the Exhibit no longer count as dates to confirm.",
   "url": "https://doovli.app/prior-inventions.html"
 }
