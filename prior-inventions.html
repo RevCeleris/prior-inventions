@@ -46,6 +46,16 @@ table.t th,table.t td{border:1px solid var(--line);padding:6px 8px;text-align:le
 table.t th{background:var(--accent-soft);font-weight:600;font-size:13px}
 table.t tr.subrow td{background:var(--sub)}
 td.idc{white-space:nowrap;font-weight:600}
+table.t tr.open td{background:var(--warn-soft)}
+table.t tr.open td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
+table.t tr.flash td{animation:flash 2.4s ease-out}
+@keyframes flash{0%,40%{background:var(--warn);color:#fff}100%{}}
+.panel.needs{border-color:var(--warn);border-width:2px}
+.needs select{width:auto;min-width:110px}
+button.stat{font:inherit;color:inherit;text-align:left;cursor:pointer}
+button.stat:hover{border-color:var(--accent)}
+#back-needs{position:fixed;right:20px;bottom:20px;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+button.stat span::after{content:" \2192"}
 .pill{display:inline-block;font:600 11px/1.6 var(--body);letter-spacing:.05em;text-transform:uppercase;padding:0 7px;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
 .pill.in{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
 .pill.out{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
@@ -121,7 +131,7 @@ function msgSpan(k){const m=S.msg[k];return '<span data-msg="'+k+'" class="'+(m&
 
 /* ---------- tabs ---------- */
 document.querySelector(".tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;showTab(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(_){location.hash=b.dataset.tab}});
-function showTab(t){if(!["dashboard","approval","register","exhibit"].includes(t))t="dashboard";S.tab=t;document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t?"true":"false"));["dashboard","approval","register","exhibit"].forEach(v=>$("view-"+v).hidden=v!==t)}
+function showTab(t){if(!["dashboard","approval","register","exhibit"].includes(t))t="dashboard";S.tab=t;document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t?"true":"false"));["dashboard","approval","register","exhibit"].forEach(v=>$("view-"+v).hidden=v!==t);if(t!=="approval")showBack(false)}
 window.addEventListener("hashchange",()=>showTab(location.hash.replace("#","")));
 
 /* ---------- render ---------- */
@@ -149,15 +159,20 @@ function renderUpdate(){
   $("update-later").onclick=()=>S.db.doc("settings/update").update({dismissed:u.version}).catch(()=>{});
 }
 function counts(){const c={In:0,Out:0,Discuss:0,none:0,confirm:0};S.items.forEach(i=>{const k=/^in$/i.test(i.include)?"In":/^out$/i.test(i.include)?"Out":/^discuss$/i.test(i.include)?"Discuss":"none";c[k]++;if(k!=="Out"&&!i.exhibitDate&&(isConfirm(i.conceived)||(i.type!=="D"&&isConfirm(i.built))))c.confirm++});return c}
+function isOpen(i){return !/^(in|out)$/i.test(i.include||"")}
+function needsDate(i){return !/^out$/i.test(i.include||"")&&!i.exhibitDate&&(isConfirm(i.conceived)||(i.type!=="D"&&isConfirm(i.built)))}
+function itemLabel(i){return i.id+" "+(i.name||"")}
+function goTo(id){showTab("approval");requestAnimationFrame(()=>{const el=document.getElementById(id);if(!el)return;el.scrollIntoView({behavior:"smooth",block:"center"});if(el.tagName==="TR"){el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}showBack(el.tagName==="TR"&&!!document.getElementById("needs"))})}
+function showBack(on){let b=document.getElementById("back-needs");if(!on){if(b)b.remove();return}if(!b){b=document.createElement("button");b.id="back-needs";b.className="btn primary";b.type="button";b.dataset.act="goto-needs";b.textContent="Back to Needs your decision";document.body.appendChild(b)}}
 function renderDashboard(){
   const v=$("view-dashboard");
   if(!S.loaded){v.innerHTML='<div class="panel"><p class="empty">'+(S.db===false?"Sign in to see your list.":"Loading...")+'</p></div>';return}
   const c=counts(),m=S.main;
   let next;
   if(!S.items.length)next="Your list is empty. Run the Setup Prompt in a new Claude chat to find your candidates.";
-  else if(c.none||c.Discuss)next="Open the Approval List and set Include to In or Out on the "+(c.none+c.Discuss)+" item"+(c.none+c.Discuss===1?"":"s")+" still open. Then go back to your setup chat and send: My approvals are done.";
+  else if(c.none||c.Discuss){const op=S.items.filter(isOpen).sort(sortItems),names=op.slice(0,3).map(itemLabel).join(", ")+(op.length>3?" and "+(op.length-3)+" more":"");next="Decide In or Out on "+names+". Open the Approval List: the item"+(op.length===1?" is":"s are")+" in the Needs your decision box at the top. Then go back to your setup chat and send: My approvals are done."}
   else next="Every item is decided. Review the Exhibit, then download it as Word or PDF and take it to your lawyer before you sign anything.";
-  let h='<div class="strip">'+[["In",c.In],["Out",c.Out],["Discuss",c.Discuss],["Not set",c.none],["Dates to confirm",c.confirm]].map(x=>'<div class="stat"><b>'+x[1]+'</b><span>'+x[0]+'</span></div>').join("")+'</div>';
+  let h='<div class="strip">'+[["In",c.In],["Out",c.Out],["Discuss",c.Discuss,1],["Not set",c.none,1],["Dates to confirm",c.confirm,1]].map(x=>x[2]&&x[1]?'<button class="stat" data-act="goto-needs" type="button" title="Show these items"><b>'+x[1]+'</b><span>'+x[0]+'</span></button>':'<div class="stat"><b>'+x[1]+'</b><span>'+x[0]+'</span></div>').join("")+'</div>';
   h+='<div class="panel"><h3>Next step</h3><p style="margin:0">'+esc(next)+'</p></div>';
   h+='<div class="panel"><h3>Document control</h3><div class="tw"><table class="t"><tbody>'+
     [["Document ID",m.docId||"Not set"],["Owner",(m.name||"")+(m.name?". Every item on this list is owned by "+m.name+" personally.":"")],["Classification","Confidential (Approval List and Register). The Exhibit is written for disclosure."],["Current version",m.docVersion||"0.1 (Draft, becomes 1.0 on approval)"],["Prior Inventions version",APP_VERSION],["Review cycle","On every new invention, and before signing any employment or contractor agreement"],["Time zone","All times "+(m.timezone||"local")]].map(r=>'<tr><th style="width:200px">'+esc(r[0])+'</th><td>'+esc(r[1])+'</td></tr>').join("")+'</tbody></table></div>';
@@ -180,11 +195,29 @@ function editRow(it,isNew,type){
     '<label class="f">Notes<textarea data-f="notes">'+esc(it.notes||"")+'</textarea></label>'+
     '<div class="rowb"><button class="btn primary sm" data-act="save-row" data-type="'+t+'" data-new="'+(isNew?1:0)+'" data-id="'+esc(it._doc||"")+'" type="button">Save</button><button class="btn sm" data-act="cancel-row" type="button">Cancel</button>'+(!isNew?'<button class="btn danger sm" data-act="del-row" data-id="'+esc(it._doc)+'" type="button">Remove item</button>':'')+msgSpan("row")+'</div></td></tr>';
 }
+function needsPanel(){
+  const op=S.items.filter(isOpen).sort(sortItems),dt=S.items.filter(i=>!isOpen(i)&&needsDate(i)).sort(sortItems);
+  if(!op.length&&!dt.length)return "";
+  const go=i=>'<button class="btn sm" data-act="goto-row" data-id="'+esc(i._doc)+'" type="button">Go to row</button>';
+  const short=s=>{s=String(s||"");return s.length>140?s.slice(0,137).replace(/\s+\S*$/,"")+"...":s};
+  let h='<div class="panel needs" id="needs"><h3>Needs your decision</h3><p class="note">Choose In, Out or Discuss right here, or use Go to row to see the item in the full list. Each item leaves this box once it is decided.</p>';
+  if(op.length){
+    h+='<div class="tw"><table class="t"><thead><tr><th>ID</th><th>Item</th><th>What it is</th><th>Include</th><th></th></tr></thead><tbody>'+
+      op.map(i=>'<tr><td class="idc">'+esc(i.id)+'</td><td>'+esc(i.name)+'</td><td>'+esc(short(i.what))+'</td><td>'+(S.canWrite?'<select data-act="incl" data-id="'+esc(i._doc)+'" aria-label="Include '+esc(i.id)+'">'+["","In","Out","Discuss"].map(o=>'<option value="'+o+'"'+((i.include||"")===o?" selected":"")+'>'+(o||"Choose")+'</option>').join("")+'</select>':inclPill(i.include))+'</td><td>'+go(i)+'</td></tr>').join("")+'</tbody></table></div>';
+  }
+  const dts=S.items.filter(needsDate).sort(sortItems);
+  if(dts.length){
+    const which=i=>[isConfirm(i.conceived)?"Conceived":"",i.type!=="D"&&isConfirm(i.built)?"Built":""].filter(Boolean).join(" and ");
+    h+='<h3 style="font-size:15px">Dates to confirm</h3><div class="tw"><table class="t"><thead><tr><th>ID</th><th>Item</th><th>Date needed</th><th></th></tr></thead><tbody>'+
+      dts.map(i=>'<tr><td class="idc">'+esc(i.id)+'</td><td>'+esc(i.name)+'</td><td>'+esc(which(i))+'</td><td class="rowb">'+(S.canWrite?'<button class="btn sm" data-act="edit-goto" data-id="'+esc(i._doc)+'" type="button">Edit date</button>':'')+go(i)+'</td></tr>').join("")+'</tbody></table></div>';
+  }
+  return h+'</div>';
+}
 function renderApproval(){
   const v=$("view-approval");
   if(!S.loaded){v.innerHTML="";return}
   const L=S.lists||{};
-  let h='<div class="panel"><h3>How to use this list</h3><p style="margin:0">Set the Include column on each row to In, Out or Discuss, and correct any date you know better. Rows marked In move to the Register with full detail, then to the Exhibit in general terms.</p><ul class="plain"><li>Conceived is the earliest dated record of the idea. Built is the earliest dated record of a working version. "On or before" means the record proves the date was no later than that.</li><li>"Confirm" means no dated record was found. Fill in the date, or a date range you are confident of. A row that shows an Exhibit date is already settled for the Exhibit and does not count as open.</li><li>Each ID stays with its item for good: M for methodologies, S for software built, D for designed but not built.</li></ul></div>';
+  let h=needsPanel()+'<div class="panel"><h3>How to use this list</h3><p style="margin:0">Set the Include column on each row to In, Out or Discuss, and correct any date you know better. Rows marked In move to the Register with full detail, then to the Exhibit in general terms.</p><ul class="plain"><li>Conceived is the earliest dated record of the idea. Built is the earliest dated record of a working version. "On or before" means the record proves the date was no later than that.</li><li>"Confirm" means no dated record was found. Fill in the date, or a date range you are confident of. A row that shows an Exhibit date is already settled for the Exhibit and does not count as open.</li><li>Each ID stays with its item for good: M for methodologies, S for software built, D for designed but not built.</li></ul></div>';
   TYPES.forEach(([t,head,line])=>{
     const its=S.items.filter(i=>i.type===t).sort(sortItems);const isD=t==="D";
     h+='<div class="panel"><div class="bar"><div><h3>'+head+'</h3><p class="note">'+line+'</p></div>'+(S.canWrite?'<button class="btn sm" data-act="add-row" data-type="'+t+'" type="button">Add an item</button>':'')+'</div><div class="tw"><table class="t"><thead><tr><th>ID</th><th>Item</th><th>What it is</th><th>Conceived</th>'+(isD?'':'<th>Built</th>')+'<th>Include</th><th>Notes</th><th></th></tr></thead><tbody>';
@@ -193,7 +226,8 @@ function renderApproval(){
     its.forEach(i=>{
       if(S.edit&&!S.edit.isNew&&S.edit.doc===i._doc){h+=editRow(i,false);return}
       const sub=!!i.parent;
-      h+='<tr'+(sub?' class="subrow"':'')+'><td class="idc">'+(sub?'↳ ':'')+esc(i.id)+'</td><td>'+esc(i.name)+'</td><td>'+esc(i.what)+'</td><td>'+dateHtml(i.conceived)+(i.exhibitDate?'<br><span class="note">Exhibit date: '+esc(i.exhibitDate)+'</span>':'')+'</td>'+(isD?'':'<td>'+dateHtml(i.built)+'</td>')+
+      const cls=[sub?"subrow":"",isOpen(i)||needsDate(i)?"open":""].filter(Boolean).join(" ");
+      h+='<tr id="row-'+esc(i._doc)+'"'+(cls?' class="'+cls+'"':'')+'><td class="idc">'+(sub?'↳ ':'')+esc(i.id)+'</td><td>'+esc(i.name)+'</td><td>'+esc(i.what)+'</td><td>'+dateHtml(i.conceived)+(i.exhibitDate?'<br><span class="note">Exhibit date: '+esc(i.exhibitDate)+'</span>':'')+'</td>'+(isD?'':'<td>'+dateHtml(i.built)+'</td>')+
         '<td>'+(S.canWrite?'<select data-act="incl" data-id="'+esc(i._doc)+'" aria-label="Include '+esc(i.id)+'">'+["","In","Out","Discuss"].map(o=>'<option value="'+o+'"'+((i.include||"")===o?" selected":"")+'>'+(o||"Choose")+'</option>').join("")+'</select>':inclPill(i.include))+'</td><td>'+esc(i.notes)+'</td><td>'+(S.canWrite?'<button class="btn sm" data-act="edit-row" data-id="'+esc(i._doc)+'" type="button">Edit</button>':'')+'</td></tr>';
     });
     h+='</tbody></table></div></div>';
@@ -270,6 +304,9 @@ document.addEventListener("click",async e=>{
   const act=b.dataset.act;
   if(act==="add-row"){S.edit={isNew:true,type:b.dataset.type};renderApproval();return}
   if(act==="edit-row"){S.edit={doc:b.dataset.id};renderApproval();return}
+  if(act==="goto-row"){goTo("row-"+b.dataset.id);return}
+  if(act==="goto-needs"){showBack(false);goTo("needs");return}
+  if(act==="edit-goto"){S.edit={doc:b.dataset.id};renderApproval();const id=b.dataset.id;showTab("approval");requestAnimationFrame(()=>{const f=document.querySelector('#view-approval tr.edrow input[data-f="conceived.text"]');const r=f&&f.closest("tr");if(r)r.scrollIntoView({behavior:"smooth",block:"center"});if(f)f.focus({preventScroll:true})});return}
   if(act==="cancel-row"){S.edit=null;renderApproval();return}
   if(act==="save-row"){
     const tr=b.closest("tr"),o=collectRow(tr),isNew=b.dataset.new==="1",type=b.dataset.type;
