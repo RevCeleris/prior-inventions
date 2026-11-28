@@ -54,6 +54,7 @@ table.t tr.flash td{animation:flash 2.4s ease-out}
 .needs select{width:auto;min-width:110px}
 button.stat{font:inherit;color:inherit;text-align:left;cursor:pointer}
 button.stat:hover{border-color:var(--accent)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:6;background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);border-radius:8px;padding:10px 16px;font:600 14px var(--body);box-shadow:0 2px 10px rgba(0,0,0,.18);max-width:90vw}
 #back-needs{position:fixed;right:20px;bottom:20px;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.18)}
 button.stat span::after{content:" \2192"}
 .pill{display:inline-block;font:600 11px/1.6 var(--body);letter-spacing:.05em;text-transform:uppercase;padding:0 7px;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
@@ -163,6 +164,7 @@ function isOpen(i){return !/^(in|out)$/i.test(i.include||"")}
 function needsDate(i){return !/^out$/i.test(i.include||"")&&!i.exhibitDate&&(isConfirm(i.conceived)||(i.type!=="D"&&isConfirm(i.built)))}
 function itemLabel(i){return i.id+" "+(i.name||"")}
 function goTo(id){showTab("approval");requestAnimationFrame(()=>{const el=document.getElementById(id);if(!el)return;el.scrollIntoView({behavior:"smooth",block:"center"});if(el.tagName==="TR"){el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}showBack(el.tagName==="TR"&&!!document.getElementById("needs"))})}
+function toast(text){let el=document.getElementById("toast");if(!el){el=document.createElement("div");el.id="toast";el.setAttribute("role","status");document.body.appendChild(el)}el.textContent=text;clearTimeout(toast.t);toast.t=setTimeout(()=>el.remove(),5000)}
 function showBack(on){let b=document.getElementById("back-needs");if(!on){if(b)b.remove();return}if(!b){b=document.createElement("button");b.id="back-needs";b.className="btn primary";b.type="button";b.dataset.act="goto-needs";b.textContent="Back to Needs your decision";document.body.appendChild(b)}}
 function renderDashboard(){
   const v=$("view-dashboard");
@@ -296,7 +298,11 @@ async function addRevision(desc){
 }
 document.addEventListener("change",async e=>{
   const s=e.target.closest('[data-act="incl"]');if(!s||!S.db)return;
-  try{await S.db.doc("items/"+s.dataset.id).update({include:s.value,updatedAt:nowIso()})}catch(err){alert2("Could not save. Try again.")}
+  const id=s.dataset.id,val=s.value,it=S.items.find(x=>x._doc===id);
+  try{await S.db.doc("items/"+id).update({include:val,updatedAt:nowIso()});
+    const left=S.items.filter(x=>x._doc!==id&&isOpen(x)).length,decided=/^(in|out)$/i.test(val);
+    toast((it?it.id+" ":"")+(val?"marked "+val:"set back to Not set")+". Saved."+(decided&&!left?" Everything is decided.":""))}
+  catch(err){alert2("Could not save. Try again.")}
 });
 function alert2(t){setMsg("row",t,true)}
 document.addEventListener("click",async e=>{
